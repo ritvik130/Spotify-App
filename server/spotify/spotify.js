@@ -69,4 +69,50 @@ async function getTop10Artist(token){
     }
 }
 
-module.exports = {getAccessToken, fetchProfile, getTop10Songs, getTop10Artist}
+async function getUserPlaylists(token) {
+    const spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(token);
+    try {
+      const data = await spotifyApi.getUserPlaylists({ limit: 5 });
+      return data.body.items;
+    } catch (error) {
+      console.error("Error getting user's playlists:", error);
+      throw error;
+    }
+}
+
+async function getRecommendations(token, songName) {
+    const spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(token);
+    try {
+      const response = await spotifyApi.searchTracks(songName, { limit: 1 });
+      const trackId = response.body.tracks.items[0].id;
+      const recommendations = await spotifyApi.getRecommendations({
+        seed_tracks: [trackId],
+      });
+      return recommendations.body.tracks;
+    } catch (error) {
+      console.error("Error getting recommendations:", error);
+      throw error;
+    }
+}
+async function searchSong(token, query) {
+    const spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(token);
+    try {
+      const response = await spotifyApi.searchTracks(query, { limit: 1 });
+      const track = response.body.tracks.items[0];
+      return {
+        id: track.id,
+        name: track.name,
+        artist: track.artists[0].name,
+        imageUrl: track.album.images[0].url,
+      };
+    } catch (error) {
+      console.error("Error searching for song:", error);
+      throw error;
+    }
+}
+  
+
+module.exports = {getAccessToken, fetchProfile, getTop10Songs, getTop10Artist, getUserPlaylists, getRecommendations, searchSong}

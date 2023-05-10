@@ -148,4 +148,17 @@ router.get('/top10Artists', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.get('/searchSong', async (req, res) =>{
+    try{
+        const access_token = req.cookies.access_token;
+        const query = req.query.q;
+        const song = await spotify.searchSong(access_token, query);
+        console.log('songs: ', song);
+        res.json({ songs: [song] });
+    } catch {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 module.exports = router;

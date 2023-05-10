@@ -1,0 +1,22 @@
+{
+  "name": "spotify-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "Ritvik Johar",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.1",
+    "nodemon": "^2.0.22",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}

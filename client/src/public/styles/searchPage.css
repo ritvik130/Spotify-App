@@ -1,0 +1,40 @@
+  h1 {
+    margin-top: 30px; /* add margin top to h1 */
+    margin-left: 40px; /* add margin left to h1 */
+  }
+  form {
+    display: flex; /* set form to flex */
+    align-items: center; /* center align the form items */
+    justify-content: center; /* center the form */
+    margin-top: 50px; /* add margin top to the form */
+  }
+  
+  label {
+    font-size: 18px; /* set font size for label */
+    color: #1ed760; /* set color for label */
+    margin-right: 10px; /* add margin right to the label */
+  }
+  
+  #search-input {
+    border: none; /* remove border */
+    border-radius: 20px; /* add rounded corners to input */
+    padding: 10px; /* add padding to input */
+    width: 250px; /* set width of input */
+    font-size: 16px; /* set font size for input */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* add shadow to input */
+  }
+  
+  button[type="button"] {
+    background-color: #1ed760; /* set the background color of buttons to green */
+    color: white; /* set the text color of buttons to white */
+    border-radius: 10px; /* add rounded corners to buttons */
+    padding: 10px 20px; /* add padding to the buttons */
+    margin-left: 40px; /* add margin left to the button */
+    font-size: 16px; /* set font size for button */
+  }
+  button:hover{
+    background-color: #17a04b;
+  }
+  #search-results {
+    margin-top: 30px; /* add margin top to search results */
+  }

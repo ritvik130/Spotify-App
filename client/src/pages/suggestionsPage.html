@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0", charset="utf-8">
+	<title>Suggestion Box</title>
+    <link rel="stylesheet" type="text/css" href="../styles/global.css">
+	<link rel="stylesheet" type="text/css" href="../styles/suggestionsPage.css"> 
+</head>
+<body>
+	<button class="back" onclick="location.href='/homePage'">Back</button>
+	<h1>Suggestion Box</h1>
+	<p>Use this form to send me your suggestions/questions:</p>
+	<form action="/" method="post">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required><br><br>
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" required><br><br>
+		<label for="suggestion">Suggestion:</label><br>
+		<textarea id="suggestion" name="suggestion" rows="5" cols="50" required></textarea><br><br>
+		<input type="submit" value="Submit">
+		<input type="reset" value="Reset">
+	</form>
+</body>
+</html>

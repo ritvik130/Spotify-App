@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home Page</title>
+	<link rel="stylesheet" type="text/css" href="../styles/global.css">
+	<link rel="stylesheet" type="text/css" href="../styles/homePage.css">
+</head>
+<body>
+	<script language="javascript">
+        const access_token = document.cookie
+                            .split("; ")
+                            .find((row) => row.startsWith("access_token="))
+                            ?.split("=")[1];
+        // console.log(access_token);
+        async function fetchGreetingAndImage() {
+            try {
+                const response = await fetch('/displayName');
+                const data = await response.json();
+                document.getElementById('greeting').textContent = `Hello, ${data.displayName}!`;
+                if (data.imageUrl) {
+                    document.getElementById('user-image').src = data.imageUrl;
+                } else {
+                    document.getElementById('user-image').style.display = 'none';
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('greeting').textContent = 'Error loading user data.';
+            }
+        }
+        fetchGreetingAndImage();
+    </script>
+	<center><h1>Home Page</h1></center>
+	<div id="user-info">
+        <img id="user-image" src="" alt="" />
+        <p id="greeting">Loading...</p>
+    </div>
+	<center>
+		<table>
+			<tr>
+				<td><button onclick="location.href='/topSongsPage'">Top 10 Songs</button></td>
+				<td><button onclick="location.href='/topArtistPage'">Top 10 Artists</button></td>
+			</tr>
+			<tr>
+				<td><button onclick="location.href='/myPlaylistsPage'">My Playlists</button></td>
+				<td><button onclick="location.href='/createPlaylistPage'">Create New Playlist</button></td>
+			</tr>
+			<tr>
+				<td><button onclick="location.href='/searchPage'">Search Songs</button></td>
+				<td><button onclick="location.href='/recommendationPage'"> Get Recommendations</button></td>
+			</tr>
+		</table>
+	</center>
+	<p>Thanks for visiting our site! Click the button below to give suggestions/questions: </p>
+	<center>
+		<button onclick="location.href='/suggestionsPage'">Suggestions</button>
+	</center>
+</body>
+</html>
+

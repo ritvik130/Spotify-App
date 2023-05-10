@@ -41,13 +41,12 @@ async function fetchProfile(token) {
   };
 
   const response = await axios(result);
-  console.log(response.data);
   return response.data;
 }
 
-async function getTop10Songs(access_token) {
+async function getTop10Songs(token) {
   const spotifyApi = new SpotifyWebApi();
-  spotifyApi.setAccessToken(access_token);
+  spotifyApi.setAccessToken(token);
 
   try {
     const data = await spotifyApi.getMyTopTracks({ limit: 10 });
@@ -58,4 +57,16 @@ async function getTop10Songs(access_token) {
   }
 }
 
-module.exports = {getAccessToken, fetchProfile, getTop10Songs}
+async function getTop10Artist(token){
+    const spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(token);
+    try {
+        const data = await spotifyApi.getMyTopArtists({ limit: 10 });
+        return data.body.items; 
+    } catch (error) {
+        console.error("Error getting top 10 songs:", error);
+        throw error;
+    }
+}
+
+module.exports = {getAccessToken, fetchProfile, getTop10Songs, getTop10Artist}

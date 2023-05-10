@@ -4,9 +4,11 @@ const router = require('./router/htmlRoutes');
 const path = require('path');
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 app.use(cors())
 app.use(express.urlencoded({extended: true}))
+// ... other imports and configuration
 
 app.use(cookieParser());
 const PORT = process.env.PORT || 5000;

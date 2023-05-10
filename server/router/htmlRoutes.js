@@ -4,7 +4,7 @@ const path = require('path');
 const spotify = require("../spotify/spotify")
 
 
-// global.spotify_access_token = ""
+let clientId, clientSecret;
 
 const homePagePath = path.join('../../client/src/pages/homePage.html');
 const loginPagePath = path.join('../../client/src/pages/loginPage.html');
@@ -20,58 +20,36 @@ router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, loginPagePath));
 });
 
-// router.post("/login", (req, res) => {
-//   spotify.getAccessToken(req.body.clientId, req.body.clientSecret)
-//     .then((access_token) => {
-//       global.spotify_access_token = access_token;
-
-//       const redirectLink = 'http://localhost:5000/homePage';
-//       const AUTHORIZE = 'https://accounts.spotify.com/authorize';
-
-//       let url = AUTHORIZE;
-//       url += '?client_id=' + req.body.clientId;
-//       url += '&response_type=code';
-//       url += "&redirect_uri=" + encodeURI(redirectLink);
-//       url += "&show_dialog=true";
-//       url += "&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
-//       res.redirect(url);
-//     })
-// })
-
 router.post("/login", (req, res) => {
-  const clientId = req.body.clientId;
-  const clientSecret = req.body.clientSecret;
-  const redirectLink = 'http://localhost:5000/callback'; // Replace with your Redirect URI
-  const AUTHORIZE = 'https://accounts.spotify.com/authorize';
-  res.cookie("clientId", clientId);
-  res.cookie("clientSecret", clientSecret);
-  let url = AUTHORIZE;
-  url += '?client_id=' + clientId;
-  url += '&response_type=code';
-  url += "&redirect_uri=" + encodeURIComponent(redirectLink);
-  url += "&show_dialog=true";
-  url += "&scope=user-read-private user-read-email user-top-read user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
-  res.redirect(url);
+    clientId = req.body.clientId;
+    clientSecret = req.body.clientSecret;
+    const redirectLink = 'http://localhost:5000/callback';
+    const AUTHORIZE = 'https://accounts.spotify.com/authorize';
+  
+    let url = AUTHORIZE;
+    url += '?client_id=' + clientId;
+    url += '&response_type=code';
+    url += "&redirect_uri=" + encodeURIComponent(redirectLink);
+    url += "&show_dialog=true";
+    url += "&scope=user-read-private user-read-email user-top-read user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
+    console.log('Req body:', req.body);
+    res.redirect(url);
 });
-
-
+  
 router.get("/callback", async (req, res) => {
-  const { code } = req.query;
-  const clientId = req.cookies.clientId;
-  const clientSecret = req.cookies.clientSecret;
-  const redirectUri = 'http://localhost:5000/callback'; 
-
-  try {
-    const accessToken = await spotify.getAccessToken(clientId, clientSecret, code, redirectUri);
-    global.spotify_access_token = accessToken;
-
-    res.redirect('/homePage');
-  } catch (error) {
-    res.status(500).send("Something went wrong");
-  }
+    const { code } = req.query;
+    const redirectUri = 'http://localhost:5000/callback';
+    console.log('/callback: ', clientId );
+  
+    try {
+      const accessToken = await spotify.getAccessToken(clientId, clientSecret, code, redirectUri);
+      global.spotify_access_token = accessToken;
+  
+      res.redirect('/homePage');
+    } catch (error) {
+      res.status(500).send("Something went wrong");
+    }
 });
-
-
 //Route fot the home page
 router.get('/homePage', (req, res) => {
   res.append('Set-Cookie', 'access_token=' + global.spotify_access_token);
@@ -136,8 +114,6 @@ router.get('/top10Songs', async (req, res) => {
   try{
     const access_token = req.cookies.access_token;
     const songs = await spotify.getTop10Songs(access_token);
-    console.log(songs);
-
     const songData = songs.map((item) => { 
       return {
         name: item.name,
@@ -145,7 +121,6 @@ router.get('/top10Songs', async (req, res) => {
         imageUrl: item.album.images[0]?.url
       };
     });
-
     res.json({
       songs: songData
     });
@@ -155,4 +130,22 @@ router.get('/top10Songs', async (req, res) => {
   }
 });
 
+router.get('/top10Artists', async (req, res) => {
+    try {
+        const access_token = req.cookies.access_token;
+        const artists = await spotify.getTop10Artist(access_token);
+        const artistData = artists.map((item) => {
+            return {
+                name: item.name,
+                imageUrl: item.images[0]?.url
+            };
+        });
+        res.json({
+            artists: artistData
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 module.exports = router;

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Page</title>
+  <link rel="stylesheet" type="text/css" href="../styles/global.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/loginPage.css" />
+</head>
+
+<body>
+  <center>
+    <h1>Login Page</h1>
+  </center>
+  <center>
+    <img src="../images/Spotify_logo.png" width="1000" height="300" />
+  </center>
+  <div>
+    <form class="form" action="/login" method="post">
+      <center>
+        <div class="mb-3">
+          <label for="clientId" class="form-label">Client ID</label>
+          <input type="text" class="form-control" name="clientId" placeholder="" />
+        </div>
+        <br />
+        <div class="mb-3">
+          <label for="clientSecret" class="form-label">Client Secret</label>
+          <input type="text" class="form-control" name="clientSecret" placeholder="" />
+        </div>
+        <br />
+        <input class="btn btn-primary btn-lg" type="submit" value="Request Authorization" />
+        <br />
+  </div>
+  </center>
+  </form>
+  </div>
+  <center>
+    <p>
+      This website is intended only for Spotify Users. To create an account
+      click
+      <a
+        href="https://www.spotify.com/ca-en/premium/?utm_source=ca-en_brand_contextual_text&utm_medium=paidsearch&utm_campaign=alwayson_ucanz_ca_premiumbusiness_highsubintent_brand+contextual+text+exact+ca-en+google&gclid=EAIaIQobChMIlfr68Me7_gIVBymzAB2VLweoEAAYASAAEgLQuvD_BwE&gclsrc=aw.ds">here</a>
+    </p>
+  </center>
+</body>
+</html>

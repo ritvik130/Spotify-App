@@ -1,0 +1,21 @@
+/* Global styles */
+
+body {
+    background-color: black;
+    color: white;
+  }
+  h1 {
+    margin-top: 40px; 
+  }
+  .back {
+    font-size: 16px; /* set font size for back button */
+    background-color: #1ed760; /* set the background color of buttons to green */
+    color: white; /* set the text color of buttons to white */
+    border-radius: 10px; /* add rounded corners to buttons */
+    padding: 8px 16px; /* add padding to the buttons */
+    margin: 10px; /* add margin around the buttons */
+    width: auto; /* set the width of the buttons */
+  }
+  .back:hover {
+    background-color: #17a04b;
+  }

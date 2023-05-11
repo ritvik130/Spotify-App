@@ -161,4 +161,44 @@ router.get('/searchSong', async (req, res) =>{
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.post('/createPlaylist', async (req, res) => {
+  try {
+    const accessToken = req.cookies.access_token;
+    const { playlistName } = req.body;
+
+    const playlist = await spotify.createPlaylist(accessToken, playlistName);
+
+    res.json({ playlistId: playlist.body.id });
+  } catch (error) {
+    console.error('Error creating playlist:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+router.post('/addSong', async (req, res) => {
+  try {
+    const accessToken = req.cookies.access_token;
+    const { playlistName, songName } = req.body;
+
+    await addSong(accessToken, playlistName, songName);
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Error adding song to playlist:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/myPlaylists', async (req, res) => {
+  try {
+    const accessToken = req.cookies.access_token;
+    const playlists = await spotify.getUserPlaylists(accessToken);
+    res.status(200).send(playlists);
+  } catch (error) {
+    console.error('Error getting user playlists:', error);
+    res.status(error.statusCode || 500).send(error.message);
+  }
+});
 module.exports = router;

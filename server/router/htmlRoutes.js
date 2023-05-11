@@ -32,15 +32,12 @@ router.post("/login", (req, res) => {
     url += "&redirect_uri=" + encodeURIComponent(redirectLink);
     url += "&show_dialog=true";
     url += "&scope=user-read-private user-read-email user-top-read user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
-    console.log('Req body:', req.body);
     res.redirect(url);
 });
   
 router.get("/callback", async (req, res) => {
     const { code } = req.query;
     const redirectUri = 'http://localhost:5000/callback';
-    console.log('/callback: ', clientId );
-  
     try {
       const accessToken = await spotify.getAccessToken(clientId, clientSecret, code, redirectUri);
       global.spotify_access_token = accessToken;
@@ -95,11 +92,8 @@ router.get('/displayName', async (req, res) => {
   try {
     const access_token = req.cookies.access_token;
     const profile = await spotify.fetchProfile(access_token);
-    console.log(profile);
-
     const displayName = profile.display_name;
     const imageUrl = profile.images.length > 0 ? profile.images[0].url : null;
-
     res.json({
       displayName: displayName,
       imageUrl: imageUrl
@@ -199,5 +193,18 @@ router.get('/myPlaylists', async (req, res) => {
     console.error('Error getting user playlists:', error);
     res.status(error.statusCode || 500).send(error.message);
   }
+});
+
+router.get('/recommendations', async (req, res) => {
+    const token = req.cookies.access_token;
+    const songName = req.query.q;
+    try {
+        const recommendations = await spotify.getRecommendations(token, songName);
+        console.log(recommendations);
+        res.json(recommendations);
+    } catch (error) {
+        console.error("Error in /recommendations route:", error);
+        res.status(500).send('There was an error getting recommendations. Please try again later.');
+    }
 });
 module.exports = router;

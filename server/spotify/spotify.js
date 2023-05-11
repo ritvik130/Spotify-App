@@ -21,7 +21,6 @@ async function getAccessToken(clientId, clientSecret, code, redirectUri) {
 
   try {
     const response = await axios(spotifyApiConfig);
-    console.log(response.data);
     access_token = response.data.access_token;
     return response.data.access_token;
   } catch (error) {
@@ -79,21 +78,6 @@ async function getUserPlaylists(token) {
     }
 }
 
-async function getRecommendations(token, songName) {
-    const spotifyApi = new SpotifyWebApi();
-    spotifyApi.setAccessToken(token);
-    try {
-      const response = await spotifyApi.searchTracks(songName, { limit: 1 });
-      const trackId = response.body.tracks.items[0].id;
-      const recommendations = await spotifyApi.getRecommendations({
-        seed_tracks: [trackId],
-      });
-      return recommendations.body.tracks;
-    } catch (error) {
-      console.error("Error getting recommendations:", error);
-      throw error;
-    }
-}
 async function searchSong(token, query) {
     const spotifyApi = new SpotifyWebApi();
     spotifyApi.setAccessToken(token);
@@ -109,6 +93,25 @@ async function searchSong(token, query) {
     } catch (error) {
       console.error("Error searching for song:", error);
       throw error;
+    }
+}
+
+async function getRecommendations(token, songName) {
+    const spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(token);
+    try {
+        const song = await searchSong(token, songName);
+        if (!song) {
+            console.log('No song found for the song name:', songName);
+            return [];
+        }
+        const recommendations = await spotifyApi.getRecommendations({
+            seed_tracks: [song.id],
+        });
+        return recommendations.body.tracks;
+    } catch (error) {
+        console.error("Error getting recommendations:", error);
+        throw error;
     }
 }
 

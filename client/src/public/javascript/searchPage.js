@@ -1,42 +1,35 @@
-async function searchSongs(query) {
-    try {
-      const response = await fetch(`/searchSong?q=${query}`);
-      const data = await response.json();
-      console.log('searchSongs data:', data);
-      return data.song;
-    } catch (error) {
-      console.error('Error searching for songs:', error);
-      throw error;
-    }
-}
-  
-function renderSearchResults(songs) {
-    console.log('renderSearchResults songs:', songs);
-    const container = document.getElementById('search-results');
-    container.innerHTML = '';
-    
-    songs.forEach((song) => {
-      const div = document.createElement('div');
-      div.className = 'song-item';
-    
-      const img = document.createElement('img');
-      img.src = song.imageUrl;
-      img.width = 100;
-      img.height = 100;
-      div.appendChild(img);
-    
-      const name = document.createElement('p');
-      name.textContent = `${song.name} by ${song.artist}`;
-      div.appendChild(name);
-    
-      container.appendChild(div);
-    });
-  }
-  
+const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
+const searchResultsDiv = document.getElementById('search-results');
+
+
+function navigateBack() {
+  window.history.replaceState({}, document.title, '/homePage');
+  location.reload();
+}
+
 searchButton.addEventListener('click', async () => {
-    const query = document.getElementById('search-input').value;
-    const songs = await searchSongs(query);
-    renderSearchResults(songs);
+  const query = searchInput.value.trim();
+
+  if (!query) {
+    alert('Please enter a search query');
+    return;
+  }
+  try {
+    const response = await fetch(`/search?q=${query}`);
+    const data = await response.json();
+    if (!data.name || !data.artist) {
+      throw new Error('No songs found');
+    }
+    const image = document.createElement('img');
+    image.src = data.imageUrl;
+    const title = document.createElement('p');
+    title.textContent = `Song: ${data.name} | Artist: ${data.artist}`;
+    searchResultsDiv.innerHTML = '';
+    searchResultsDiv.appendChild(image);
+    searchResultsDiv.appendChild(title);
+  } catch (error) {
+    console.error('Error searching for song:', error);
+    searchResultsDiv.innerHTML = `<p>${error.message}</p>`;
+  }
 });
-  

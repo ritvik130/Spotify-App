@@ -23,18 +23,51 @@
     font-size: 16px; /* set font size for input */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* add shadow to input */
   }
-  
   button[type="button"] {
-    background-color: #1ed760; /* set the background color of buttons to green */
-    color: white; /* set the text color of buttons to white */
-    border-radius: 10px; /* add rounded corners to buttons */
-    padding: 10px 20px; /* add padding to the buttons */
-    margin-left: 40px; /* add margin left to the button */
-    font-size: 16px; /* set font size for button */
+    background-color: #1ed760;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-left: 40px;
+    font-size: 16px;
+    cursor: pointer; /* add cursor pointer to the button */
   }
   button:hover{
     background-color: #17a04b;
   }
   #search-results {
     margin-top: 30px; /* add margin top to search results */
+    display: flex;
+    flex-direction: column; /* set the search results container to flex */
+    align-items: center; /* center align the search results */
+    gap: 20px; /* add gap between the search results */
   }
+  .song {
+    display: flex; /* set the song container to flex */
+    align-items: center; /* center align the song */
+    gap: 20px; /* add gap between the song elements */
+    max-width: 500px; /* set max-width for the song container */
+    margin: 0 auto; /* center align the song container */
+  }
+  .div.song img {
+    width: 50px !important; /* set the image width to 100px */
+    height: 50px !important; /* set the image height to 100px */
+    object-fit: cover; /* add cover object-fit to the image */
+    border-radius: 50%; /* add rounded corners to the image */
+  }
+  .song-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* center align the text */
+  }
+  .song-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .song-artist {
+    font-size: 16px;
+    color: gray;
+  }
+  

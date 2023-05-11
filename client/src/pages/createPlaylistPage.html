@@ -3,17 +3,24 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../styles/global.css">
-	  <link rel="stylesheet" type="text/css" href="../styles/createPlaylistPage.css"> 
+    <link rel="stylesheet" type="text/css" href="../styles/createPlaylistPage.css">
     <title>Create Playlist</title>
   </head>
   <body>
-    <button class="back" onclick="location.href='/homePage'">Back</button>
+    <button class="back" onclick="navigateBack()">Back</button>
+    <h1>Create Playlist</h1><br></br>
+    <form>
+      <label for="playlist-name">Playlist Name:</label>
+      <input type="text" id="playlist-name" name="playlist-name">
+      <button type="button" onclick="createNewPlaylist()">Create Playlist</button>
+    </form>
     <h1>Search Songs</h1><br></br>
     <form>
       <label for="search-input">Search:</label>
       <input type="text" id="search-input" name="search-input">
-      <button type="button">Add</button>
+      <button type="button" onclick="addSongToPlaylist()">Add</button>
     </form>
     <div id="search-results"></div>
+    <script src="../javascript/createPlaylist.js" defer></script>
   </body>
 </html>

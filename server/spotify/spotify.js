@@ -1,9 +1,6 @@
 const axios = require("axios");
 const SpotifyWebApi = require('spotify-web-api-node');
 
-// Create the Spotify API client
-const spotifyApi = new SpotifyWebApi();
-
 // Code for access token obtained from https://developer.spotify.com/documentation/web-api/tutorials/code-flow
 async function getAccessToken(clientId, clientSecret, code, redirectUri) {
   let spotifyApiConfig = {
@@ -18,6 +15,7 @@ async function getAccessToken(clientId, clientSecret, code, redirectUri) {
       grant_type: "authorization_code",
       code,
       redirect_uri: redirectUri,
+      scope: "user-read-email user-read-private user-read-top playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public"
     },
   };
 
@@ -113,6 +111,59 @@ async function searchSong(token, query) {
       throw error;
     }
 }
+
+async function createPlaylist(token, playlistName) {
+  const spotifyApi = new SpotifyWebApi();
+  spotifyApi.setAccessToken(token);
+
+  try {
+    const user = await spotifyApi.getMe();
+    const playlist = await spotifyApi.createPlaylist(user.id, {
+      name: playlistName,
+      public: true,
+    });
+
+    console.log(`Playlist ${playlist.name} created!`);
+    return playlist;
+  } catch (error) {
+    console.error("Error creating playlist:", error);
+    throw error;
+  }
+}
+
+async function addSong(token, playlistName, songName) {
+  const spotifyApi = new SpotifyWebApi();
+  spotifyApi.setAccessToken(token);
+
+  try {
+    // Search for the song
+    const song = await spotifyApi.searchTracks(songName);
+
+    if (song.body.tracks.items.length === 0) {
+      console.log(`Song "${songName}" not found`);
+      return;
+    }
+
+    // Get the playlist ID
+    const playlists = await spotifyApi.getUserPlaylists();
+    const playlist = playlists.body.items.find(p => p.name === playlistName);
+
+    if (!playlist) {
+      console.log(`Playlist "${playlistName}" not found`);
+      return;
+    }
+
+    // Add the song to the playlist
+    const trackUri = song.body.tracks.items[0].uri;
+    const addTrackResponse = await spotifyApi.addTracksToPlaylist(playlist.id, [trackUri]);
+
+    console.log(`Song "${songName}" added to playlist "${playlistName}"`);
+  } catch (error) {
+    console.error('Error adding song to playlist:', error);
+    throw error;
+  }
+}
+
   
 
-module.exports = {getAccessToken, fetchProfile, getTop10Songs, getTop10Artist, getUserPlaylists, getRecommendations, searchSong}
+module.exports = {getAccessToken, fetchProfile, getTop10Songs, getTop10Artist, getUserPlaylists, getRecommendations, searchSong, createPlaylist, addSong}

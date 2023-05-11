@@ -149,17 +149,16 @@ router.get('/top10Artists', async (req, res) => {
     }
 });
 
-router.get('/searchSong', async (req, res) =>{
-    try{
-        const access_token = req.cookies.access_token;
-        const query = req.query.q;
-        const song = await spotify.searchSong(access_token, query);
-        console.log('songs: ', song);
-        res.json({ songs: [song] });
-    } catch {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
+router.get('/search', async (req, res) => {
+  try {
+    const accessToken = req.cookies.access_token;
+    const query = req.query.q;
+    const song = await spotify.searchSong(accessToken, query);
+    res.json(song);
+  } catch (error) {
+    console.error('Error searching for song:', error);
+    res.status(500).json({ error: 'An error occurred while searching for the song' });
+  }
 });
 
 router.post('/createPlaylist', async (req, res) => {

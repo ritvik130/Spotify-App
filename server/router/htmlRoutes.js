@@ -19,7 +19,10 @@ const suggestionsPagePath = path.join('../../../client/src/pages/suggestionsPage
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, loginPagePath));
 });
-
+router.get('/logout', (req, res) => {
+  res.clearCookie('session_cookie_name'); 
+  res.redirect('/');
+});
 router.post("/login", (req, res) => {
     clientId = req.body.clientId;
     clientSecret = req.body.clientSecret;
@@ -31,7 +34,7 @@ router.post("/login", (req, res) => {
     url += '&response_type=code';
     url += "&redirect_uri=" + encodeURIComponent(redirectLink);
     url += "&show_dialog=true";
-    url += "&scope=user-read-private user-read-email user-top-read user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
+    url += "&scope=user-read-private user-read-email user-top-read playlist-modify-public user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
     res.redirect(url);
 });
   
@@ -159,7 +162,7 @@ router.post('/createPlaylist', async (req, res) => {
   try {
     const accessToken = req.cookies.access_token;
     const { playlistName } = req.body;
-
+    console.log('Playlist:', playlistName);
     const playlist = await spotify.createPlaylist(accessToken, playlistName);
 
     res.json({ playlistId: playlist.body.id });
@@ -168,7 +171,6 @@ router.post('/createPlaylist', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 router.post('/addSong', async (req, res) => {
   try {

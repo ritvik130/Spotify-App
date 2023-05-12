@@ -8,9 +8,8 @@ const session = require('express-session');
 
 app.use(cors())
 app.use(express.urlencoded({extended: true}))
-// ... other imports and configuration
-
 app.use(cookieParser());
+
 const PORT = process.env.PORT || 5000;
 const publicPath = '../client/src/public';
 const pagesPath = '../client/sr/pages';

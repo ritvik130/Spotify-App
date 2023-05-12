@@ -123,7 +123,7 @@ async function createPlaylist(token, playlistName) {
     const user = await spotifyApi.getMe();
     const playlist = await spotifyApi.createPlaylist(user.id, {
       name: playlistName,
-      public: true,
+      public: false,
     });
 
     console.log(`Playlist ${playlist.name} created!`);
